@@ -11,28 +11,32 @@
 Drive chassis (
   // Left Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
-  {2, 5}
+ // {12, 13, 14}
+   {-12, -13, -14}
+
 
   // Right Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
-  ,{-3, -4}
+  //,{20, 18, 17}
+  ,{16, 18, 17}
 
   // IMU Port
+  // TODO: Mount IMU
   ,21
 
   // Wheel Diameter (Remember, 4" wheels are actually 4.125!)
   //    (or tracking wheel diameter)
-  ,4.125
+  ,2.75
 
   // Cartridge RPM
   //   (or tick per rotation if using tracking wheels)
-  ,200
+  ,600
 
   // External Gear Ratio (MUST BE DECIMAL)
   //    (or gear ratio of tracking wheel)
   // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
   // eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
-  ,1
+  ,1.333
 
   // Uncomment if using tracking wheels
   /*
@@ -50,6 +54,15 @@ Drive chassis (
   // ,1
 );
 
+extern pros::Motor fly_wheel;
+pros::Motor fly_wheel(11);
+
+pros::Motor blocker(15);
+
+pros::Controller master(pros::E_CONTROLLER_MASTER);
+
+pros::ADIDigitalOut wings('A', true);
+pros::ADIDigitalOut intake('B', true);
 
 
 /**
@@ -60,9 +73,11 @@ Drive chassis (
  */
 void initialize() {
   // Print our branding over your terminal :D
+
   ez::print_ez_template();
   
   pros::delay(500); // Stop the user from doing anything while legacy ports configure.
+
 
   // Configure your chassis controls
   chassis.toggle_modify_curve_with_controller(true); // Enables modifying the controller curve with buttons on the joysticks
@@ -72,7 +87,7 @@ void initialize() {
   exit_condition_defaults(); // Set the exit conditions to your own constants from autons.cpp!
 
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
-  // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used. 
+  // chassis.set_left_curve_buttons(pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used. 
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
 
   // Autonomous Selector using LLEMU
@@ -157,10 +172,45 @@ void autonomous() {
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
-
+  bool flywheel_on = false;
+  bool wings_on = false;
+  bool intake_on = false;
+  blocker.set_brake_mode(MOTOR_BRAKE_HOLD);
   while (true) {
 
+    bool flywheel_toggle = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == 1;
+    if(flywheel_toggle){
+      flywheel_on = !flywheel_on;
+    }
     chassis.tank(); // Tank control
+    if (flywheel_on) {
+      fly_wheel.move(-127);
+    }else{
+      fly_wheel.move(0);
+    }
+
+    bool wings_toggle = master.get_digital_new_press(DIGITAL_L2) == 1;
+    if(wings_toggle){
+      wings_on = !wings_on;
+      wings.set_value(wings_on);
+    }
+
+    bool intake_toggle = master.get_digital_new_press(DIGITAL_L1) == 1;
+    if(intake_toggle){
+      intake_on = !intake_on;
+      intake.set_value(intake_on);
+    }
+    
+
+    if(master.get_digital(DIGITAL_R1)){
+      blocker.move(-127);
+    }else if (master.get_digital(DIGITAL_R2)){
+      blocker.move(127);
+    }else{
+      blocker.move(0);
+    }
+
+
     // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
     // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
