@@ -54,16 +54,16 @@ Drive chassis (
   // ,1
 );
 
-extern pros::Motor fly_wheel;
+//  PROS materials used for the robots movement on the map. 
 pros::Motor fly_wheel(11);
-
 pros::Motor blocker(15);
-
 pros::Controller master(pros::E_CONTROLLER_MASTER);
-
 pros::ADIDigitalOut wings('A', true);
 pros::ADIDigitalOut intake('B', true);
 
+bool flywheel_on = false;
+bool wings_on = false;
+bool intake_on = false;
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -78,10 +78,9 @@ void initialize() {
   
   pros::delay(500); // Stop the user from doing anything while legacy ports configure.
 
-
   // Configure your chassis controls
   chassis.toggle_modify_curve_with_controller(true); // Enables modifying the controller curve with buttons on the joysticks
-  chassis.set_active_brake(0); // Sets the active brake kP. We recommend 0.1.
+  chassis.set_active_brake(0.1); // Sets the active brake kP. We recommend 0.1.
   chassis.set_curve_default(0, 0); // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)  
   default_constants(); // Set the drive to your own constants from autons.cpp!
   exit_condition_defaults(); // Set the exit conditions to your own constants from autons.cpp!
@@ -172,9 +171,6 @@ void autonomous() {
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
-  bool flywheel_on = false;
-  bool wings_on = false;
-  bool intake_on = false;
   blocker.set_brake_mode(MOTOR_BRAKE_HOLD);
   while (true) {
 

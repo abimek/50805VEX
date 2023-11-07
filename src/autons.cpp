@@ -66,6 +66,17 @@ void modified_exit_condition() {
 }
 
 
+void first_auton() {
+  intake.set_value(false);
+  intake_on = false;
+  chassis.set_turn_pid(90, TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(24, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  wings.set_value(true);
+  wings_on = true;
+  chassis.set_swing_pid(ez::LEFT_SWING, -30, SWING_SPEED);
+}
 
 ///
 // Drive Example
