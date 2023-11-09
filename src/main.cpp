@@ -172,6 +172,14 @@ void autonomous() {
  */
 void opcontrol() {
   // This is preference to what you like to drive on.
+  flywheel_on = false;
+  wings_on = false;
+  intake_on = false;
+  ratchet_on = false;
+  wings.set_value(wings_on);
+  ratchet.set_value(ratchet_on);
+  intake.set_value(intake_on);
+  fly_wheel.move(0);
   blocker.set_brake_mode(MOTOR_BRAKE_HOLD);
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
   while (true) {

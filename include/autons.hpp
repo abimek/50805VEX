@@ -3,6 +3,14 @@
 #include "EZ-Template/drive/drive.hpp"
 
 extern Drive chassis;
+extern pros::Motor fly_wheel;
+extern pros::Motor blocker;
+extern pros::Controller master;
+extern pros::ADIDigitalOut wings;
+extern pros::ADIDigitalOut intake;
+extern pros::ADIDigitalOut ratchet;
+
+void auton_offense();
 
 void drive_example();
 void turn_example();

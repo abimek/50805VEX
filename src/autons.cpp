@@ -33,7 +33,7 @@ void default_constants() {
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
   chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
 }
- 
+
 void one_mogo_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
@@ -77,6 +77,23 @@ void first_auton() {
   wings.set_value(true);
   wings_on = true;
   chassis.set_swing_pid(ez::LEFT_SWING, -30, SWING_SPEED);*/
+}
+
+void auton_offense(){
+  intake.set_value(true);
+  chassis.set_drive_pid(48, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  chassis.set_turn_pid(90, TURN_SPEED);
+  chassis.wait_drive();
+  intake.set_value(false);
+  chassis.set_drive_pid(14, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  chassis.set_turn_pid(165, TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(48, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  intake.set_value(true);
+  wings.set_value(true);
 }
 
 ///
