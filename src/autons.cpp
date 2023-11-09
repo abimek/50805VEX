@@ -27,12 +27,13 @@ void default_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
   chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
+  //default: chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, .75, 0.0, 6, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, .75, 0.0, 6, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
   chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
 }
-
+ 
 void one_mogo_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
@@ -67,7 +68,7 @@ void modified_exit_condition() {
 
 
 void first_auton() {
-  intake.set_value(false);
+  /*intake.set_value(false);
   intake_on = false;
   chassis.set_turn_pid(90, TURN_SPEED);
   chassis.wait_drive();
@@ -75,7 +76,7 @@ void first_auton() {
   chassis.wait_drive();
   wings.set_value(true);
   wings_on = true;
-  chassis.set_swing_pid(ez::LEFT_SWING, -30, SWING_SPEED);
+  chassis.set_swing_pid(ez::LEFT_SWING, -30, SWING_SPEED);*/
 }
 
 ///

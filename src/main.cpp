@@ -60,10 +60,12 @@ pros::Motor blocker(15);
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 pros::ADIDigitalOut wings('A', true);
 pros::ADIDigitalOut intake('B', true);
+pros::ADIDigitalOut ratchet('C', true);
 
 bool flywheel_on = false;
 bool wings_on = false;
 bool intake_on = false;
+bool ratchet_on = false;
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -170,8 +172,8 @@ void autonomous() {
  */
 void opcontrol() {
   // This is preference to what you like to drive on.
-  chassis.set_drive_brake(MOTOR_BRAKE_COAST);
   blocker.set_brake_mode(MOTOR_BRAKE_HOLD);
+  chassis.set_drive_brake(MOTOR_BRAKE_COAST);
   while (true) {
 
     bool flywheel_toggle = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == 1;
@@ -190,6 +192,13 @@ void opcontrol() {
       wings_on = !wings_on;
       wings.set_value(wings_on);
     }
+
+    bool ratchet_toggle = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == 1;
+    if(ratchet_toggle){
+      ratchet_on = !ratchet_on;
+      ratchet.set_value(ratchet_on);
+    }
+
 
     bool intake_toggle = master.get_digital_new_press(DIGITAL_L1) == 1;
     if(intake_toggle){
