@@ -10,7 +10,10 @@ extern pros::ADIDigitalOut wings;
 extern pros::ADIDigitalOut intake;
 extern pros::ADIDigitalOut ratchet;
 
-void auton_offense();
+void auton_far_elim();
+void auton_far_elim_2();
+void auton_far_wp();
+void auton_close_wp();
 
 void drive_example();
 void turn_example();

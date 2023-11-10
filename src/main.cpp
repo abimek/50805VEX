@@ -58,9 +58,9 @@ Drive chassis (
 pros::Motor fly_wheel(11);
 pros::Motor blocker(15);
 pros::Controller master(pros::E_CONTROLLER_MASTER);
-pros::ADIDigitalOut wings('A', true);
-pros::ADIDigitalOut intake('B', true);
-pros::ADIDigitalOut ratchet('C', true);
+pros::ADIDigitalOut wings('A', false);
+pros::ADIDigitalOut intake('B', false);
+pros::ADIDigitalOut ratchet('C', false);
 
 bool flywheel_on = false;
 bool wings_on = false;
@@ -93,13 +93,17 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
+    Auton("Far Elim", auton_far_elim),
+    Auton("Far WP", auton_far_wp),
+    Auton("Close WP", auton_close_wp),
     Auton("Example Drive\n\nDrive forward and come back.", drive_example),
-    Auton("Example Turn\n\nTurn 3 times.", turn_example),
+   /* Auton("Example Turn\n\nTurn 3 times.", turn_example),
+    Auton("Offense Auton\n\nTurn 3 times.", auton_offense),
     Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
     Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
     Auton("Swing Example\n\nSwing, drive, swing.", swing_example),
     Auton("Combine all 3 movements", combining_movements),
-    Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
+    Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),*/
   });
 
   // Initialize chassis and auton selector
@@ -168,7 +172,7 @@ void autonomous() {
  *
  * If the robot is disabled or communications is lost, the
  * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
+ * task, not resume it from where it left off
  */
 void opcontrol() {
   // This is preference to what you like to drive on.
