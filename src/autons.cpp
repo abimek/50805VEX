@@ -24,46 +24,47 @@ const int SWING_SPEED = 90;
 // If the objects are light or the cog doesn't change much, then there isn't a concern here.
 
 void default_constants() {
-  chassis.set_slew_min_power(80, 80);
+/**  chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
   chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
   //default: chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, .75, 0.0, 6, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, .75, 0.0, 6, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
-  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
+  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);*/
 }
 
+
 void one_mogo_constants() {
-  chassis.set_slew_min_power(80, 80);
+  /*chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
   chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
-  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
+  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);*/
 }
 
 void two_mogo_constants() {
-  chassis.set_slew_min_power(80, 80);
+  /*chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
   chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
-  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
+  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);*/
 }
 
 void exit_condition_defaults() {
-  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
+  /*chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
   chassis.set_exit_condition(chassis.swing_exit, 100, 3, 500, 7, 500, 500);
-  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
+  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);*/
 }
 
 void modified_exit_condition() {
-  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
+  /*chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
   chassis.set_exit_condition(chassis.swing_exit, 100, 3, 500, 7, 500, 500);
-  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
+  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);*/
 }
 
 
@@ -80,7 +81,7 @@ void first_auton() {
 }
 
 void auton_close_wp(){
-  wings.set_value(true);
+  /*wings.set_value(true);
   pros::delay(1000);
   chassis.set_swing_pid(ez::RIGHT_SWING, 45, SWING_SPEED);
   chassis.wait_drive();
@@ -94,12 +95,31 @@ void auton_close_wp(){
   chassis.wait_drive();
   chassis.set_drive_pid(33, DRIVE_SPEED, true);
   chassis.wait_drive();*/
-  chassis.set_drive_pid(35, DRIVE_SPEED, true);
+  /*chassis.set_drive_pid(35, DRIVE_SPEED, true);
+  chassis.wait_drive();*/
+}
+
+// AUTON MOVEC
+void auton1() {
+  chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
   chassis.wait_drive();
+  chassis.set_swing_pid(ez::LEFT_SWING, 45, SWING_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(7, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  chassis.set_turn_pid(180, TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(7, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  wing1.set_value(true);
+  chassis.set_swing_pid(ez::LEFT_SWING, 45, SWING_SPEED);
+  chassis.wait_drive();
+  wing1.set_value(false);
+  chassis.set_drive_pid(10, DRIVE_SPEED, true);
 }
 
 void auton_far_wp(){
- intake.set_value(true);
+ /*intake.set_value(true);
   chassis.set_drive_pid(41, DRIVE_SPEED, true);
   chassis.wait_drive();
   chassis.set_turn_pid(90, TURN_SPEED);
@@ -107,21 +127,21 @@ void auton_far_wp(){
   intake.set_value(false);
   chassis.set_drive_pid(13, DRIVE_SPEED, true);
   chassis.wait_drive();
-  chassis.set_drive_pid(-32, DRIVE_SPEED, true);
+  chassis.set_drive_pid(-29, DRIVE_SPEED, true);
   chassis.wait_drive();
   chassis.set_turn_pid(360, -TURN_SPEED);
   chassis.wait_drive();
+  chassis.set_drive_pid(-18, DRIVE_SPEED, true);
+  chassis.wait_drive();
   wings.set_value(true);
-  chassis.set_drive_pid(-26, DRIVE_SPEED, true);
+  chassis.set_drive_pid(-13, DRIVE_SPEED, true);
   chassis.wait_drive();
-  chassis.set_turn_pid(330, -TURN_SPEED);
-  chassis.wait_drive();
-  chassis.set_drive_pid(-10, DRIVE_SPEED, true);
-  chassis.wait_drive();
+  chassis.set_turn_pid(350, -TURN_SPEED);
+  chassis.wait_drive();*/
 }
 
 void auton_far_elim(){
- intake.set_value(true);
+ /*intake.set_value(true);
   chassis.set_drive_pid(41, DRIVE_SPEED, true);
   chassis.wait_drive();
   chassis.set_turn_pid(90, TURN_SPEED);
@@ -158,11 +178,11 @@ void auton_far_elim(){
   intake.set_value(true);
   chassis.set_drive_pid(17, DRIVE_SPEED);
   chassis.wait_drive();
-  intake.set_value(true);
+  intake.set_value(true);*/
 }
 
 void auton_far_elim_2(){
- intake.set_value(true);
+ /*intake.set_value(true);
   chassis.set_drive_pid(41, DRIVE_SPEED, true);
   chassis.wait_drive();
   chassis.set_turn_pid(90, TURN_SPEED);
@@ -196,25 +216,26 @@ void auton_far_elim_2(){
   chassis.wait_drive();
   chassis.set_drive_pid(-15, DRIVE_SPEED);
   chassis.wait_drive();
-  chassis.set_turn_pid(230, TURN_SPEED);
+  chassis.set_turn_pid(227, TURN_SPEED);
   chassis.wait_drive();
-  chassis.set_drive_pid(28, DRIVE_SPEED);
+  chassis.set_drive_pid(25, DRIVE_SPEED);
   chassis.wait_drive();
   intake.set_value(true);
+  pros::delay(500);
   chassis.set_turn_pid(60, TURN_SPEED);
   chassis.wait_drive();
-  chassis.set_drive_pid(35, DRIVE_SPEED);
+  chassis.set_drive_pid(23, DRIVE_SPEED);
   chassis.wait_drive();
   intake.set_value(false);
-  chassis.set_drive_pid(10, DRIVE_SPEED);
-  chassis.wait_drive();
+  chassis.set_drive_pid(18, DRIVE_SPEED);
+  chassis.wait_drive();*/
 }
 
 ///
 // Drive Example
 ///
 void drive_example() {
-    auton_close_wp();
+    //auton_close_wp();
   // The first parameter is target inches
   // The second parameter is max speed the robot will drive at
   // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions

@@ -12,17 +12,17 @@ Drive chassis (
   // Left Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
  // {12, 13, 14}
-   {-12, -13, -14}
+   {-12, 15, 16} // 15, 16, 
 
 
   // Right Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
   //,{20, 18, 17}
-  ,{16, 18, 17}
+  ,{-11, 18, -17} // 11, 12, 
 
   // IMU Port
   // TODO: Mount IMU
-  ,21
+  ,19 // 17
 
   // Wheel Diameter (Remember, 4" wheels are actually 4.125!)
   //    (or tracking wheel diameter)
@@ -36,7 +36,7 @@ Drive chassis (
   //    (or gear ratio of tracking wheel)
   // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
   // eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
-  ,1.333
+  ,1.0
 
   // Uncomment if using tracking wheels
   /*
@@ -55,17 +55,16 @@ Drive chassis (
 );
 
 //  PROS materials used for the robots movement on the map. 
-pros::Motor fly_wheel(11);
-pros::Motor blocker(15);
 pros::Controller master(pros::E_CONTROLLER_MASTER);
-pros::ADIDigitalOut wings('A', false);
-pros::ADIDigitalOut intake('B', false);
-pros::ADIDigitalOut ratchet('C', false);
+pros::Motor intake(10);
+pros::ADIDigitalOut wing1('A', false);
+pros::ADIDigitalOut wing2('A', false);
+pros::ADIDigitalOut intakelev('B', false);
 
-bool flywheel_on = false;
-bool wings_on = false;
 bool intake_on = false;
-bool ratchet_on = false;
+bool wing1_on = false;
+bool wing2_on = false;
+bool intakelev_on = false;
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -176,55 +175,43 @@ void autonomous() {
  */
 void opcontrol() {
   // This is preference to what you like to drive on.
-  flywheel_on = false;
-  wings_on = false;
-  intake_on = false;
-  ratchet_on = false;
-  wings.set_value(wings_on);
-  ratchet.set_value(ratchet_on);
-  intake.set_value(intake_on);
-  fly_wheel.move(0);
-  blocker.set_brake_mode(MOTOR_BRAKE_HOLD);
+  wing1_on = false;
+  wing2_on = false;
+  intakelev_on = false;
+  wing1.set_value(wing1_on);
+  wing2.set_value(wing2_on);
+  intakelev.set_value(intake_on);
+  intake.move(0);
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
   while (true) {
-
-    bool flywheel_toggle = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) == 1;
-    if(flywheel_toggle){
-      flywheel_on = !flywheel_on;
-    }
     chassis.tank(); // Tank control
-    if (flywheel_on) {
-      fly_wheel.move(-127);
-    }else{
-      fly_wheel.move(0);
+
+    bool intakelev_toggle = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == 1;
+    if(intakelev_toggle){
+      intakelev_on = !intakelev_on;
+      intakelev.set_value(intakelev_on);
     }
 
-    bool wings_toggle = master.get_digital_new_press(DIGITAL_L2) == 1;
-    if(wings_toggle){
-      wings_on = !wings_on;
-      wings.set_value(wings_on);
+    bool wing1_toggle = master.get_digital_new_press(DIGITAL_L2) == 1;
+    if(wing1_toggle){
+      wing1_on = !wing1_on;
+      wing1.set_value(wing1_on);
     }
 
-    bool ratchet_toggle = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y) == 1;
-    if(ratchet_toggle){
-      ratchet_on = !ratchet_on;
-      ratchet.set_value(ratchet_on);
+    bool wing2_toggle = master.get_digital_new_press(DIGITAL_L1) == 1;
+    if(wing2_toggle){
+      wing2_on = !wing2_on;
+      wing2.set_value(wing2_on);
     }
 
-
-    bool intake_toggle = master.get_digital_new_press(DIGITAL_L1) == 1;
-    if(intake_toggle){
-      intake_on = !intake_on;
-      intake.set_value(intake_on);
-    }
     
 
     if(master.get_digital(DIGITAL_R1)){
-      blocker.move(-127);
+      intake.move(-127);
     }else if (master.get_digital(DIGITAL_R2)){
-      blocker.move(127);
+      intake.move(127);
     }else{
-      blocker.move(0);
+      intake.move(0);
     }
 
 
